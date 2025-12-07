@@ -52,7 +52,7 @@ module PostCreation
         RUBY
         commit message: "Seed content"
 
-        ['development', 'production'].each do |env|
+        [ "development", "production" ].each do |env|
           run("RAILS_ENV=#{env} bin/rails db:create")
           run("RAILS_ENV=#{env} bin/rails db:migrate")
           run("RAILS_ENV=#{env} bin/rails db:seed")
@@ -80,7 +80,7 @@ module PostCreation
           commit message: "Fix Test Suite #{i}"
         end
 
-        insert_into_file "app/models/post.rb", "  validates :title, presence: true\n", :after => "belongs_to :user\n"
+        insert_into_file "app/models/post.rb", "  validates :title, presence: true\n", after: "belongs_to :user\n"
         commit message: "Add validation to post model"
 
         run("mkdir -p spec/system")
@@ -107,7 +107,7 @@ module PostCreation
 
       private
 
-      def commit(message:, skips: ["RailsSchemaUpToDate"])
+      def commit(message:, skips: [ "RailsSchemaUpToDate" ])
         skip_command = ""
         skip_command = "SKIP=#{skips.join(",")}" unless skips.empty?
 
@@ -131,9 +131,9 @@ module PostCreation
       def run_with_clean_bundler_env(cmd)
         success = if defined?(Bundler)
                     Bundler.with_original_env { run(cmd) }
-                  else
+        else
                     run(cmd)
-                  end
+        end
 
         return true if success
 

@@ -110,9 +110,9 @@ module PostCreation
                     else
                       Bundler.with_unbundled_env { run(cmd) }
                     end
-                  else
+        else
                     run(cmd)
-                  end
+        end
 
         return true if success
 
