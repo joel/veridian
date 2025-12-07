@@ -4,8 +4,7 @@ RSpec.describe "posts/new" do
   before do
     assign(:post, Post.new(
                     title: "MyString",
-                    body: "MyText",
-                    user: nil
+                    body: "MyText"
                   ))
   end
 
@@ -17,7 +16,7 @@ RSpec.describe "posts/new" do
 
       assert_select "textarea[name=?]", "post[body]"
 
-      assert_select "input[name=?]", "post[user_id]"
+      assert_select "select[name=?]", "post[user_id]"
     end
   end
 end
