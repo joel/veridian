@@ -1,8 +1,75 @@
-# Omakase Ruby styling for Rails
-inherit_gem: { rubocop-rails-omakase: rubocop.yml }
+require:
+  - rubocop-capybara
+  - rubocop-factory_bot
+  - rubocop-rspec_rails
+  - rubocop-rails
 
-# Overwrite or add rules to create your own house style
-#
-# # Use `[a, [b, c]]` not `[ a, [ b, c ] ]`
-# Layout/SpaceInsideArrayLiteralBrackets:
-#   Enabled: false
+plugins:
+  - rubocop-rspec
+  - rubocop-performance
+  - rubocop-rails
+  - rubocop-rake
+
+inherit_mode:
+  merge:
+    - Include
+
+AllCops:
+  DisplayCopNames: true
+  DisplayStyleGuide: true
+  NewCops: enable
+  Exclude:
+    # ignore bin/* except for bin/setup
+    - !ruby/regexp /<%= Regexp.quote(File.expand_path("bin", __dir__)) %>\/(?!setup).*/
+    - .git/**/*
+    - db/**/*
+    - log/**/*
+    - public/**/*
+    - storage/**/*
+    - tmp/**/*
+    - vendor/**/*
+    - 'spec/spec_helper.rb'
+    - 'lib/templates/**/*'
+
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+
+Style/StringLiteralsInInterpolation:
+  EnforcedStyle: double_quotes
+
+Style/FrozenStringLiteralComment:
+  Exclude:
+    - config/**/*
+    - spec/**/*
+    - Gemfile
+    - Rakefile
+    - Thorfile
+    - bin/**/*
+    - config.ru
+    - db/**/*
+    - lib/tasks/**/*
+
+Metrics/BlockLength:
+  Exclude:
+    - config/**/*
+    - spec/**/*
+
+Metrics/ClassLength:
+  Exclude:
+    - spec/**/*
+
+Metrics/MethodLength:
+  Exclude:
+    - db/migrate/*
+    - spec/**/*
+
+Metrics/ModuleLength:
+  Exclude:
+    - config/**/*
+
+Rails/ApplicationRecord:
+  Exclude:
+    - db/migrate/**
+
+Style/Documentation:
+  Enabled: false
