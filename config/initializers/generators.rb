@@ -10,4 +10,4 @@ Rails.application.config.generators do |generator|
   generator.routing_specs true
   generator.request_specs true
   generator.system_specs true
-  end
+end

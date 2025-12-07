@@ -24,22 +24,21 @@ Rails.application.configure do
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :local
 
-# Assume all access to the app is happening through a SSL-terminating reverse proxy.
-# config.assume_ssl = true
+  # Assume all access to the app is happening through a SSL-terminating reverse proxy.
+  # config.assume_ssl = true
 
-# Enforce HTTPS semantics at the app level
-config.force_ssl  = true
+  # Enforce HTTPS semantics at the app level
+  config.force_ssl  = true
 
-# Tell Rails to treat proxied requests as HTTPS
-config.assume_ssl = true
+  # Tell Rails to treat proxied requests as HTTPS
+  config.assume_ssl = true
 
-# Don't redirect the internal healthcheck, keep Kamal happy
-config.ssl_options = {
-  redirect: {
-    exclude: ->(request) { request.path == "/up" }
+  # Don't redirect the internal healthcheck, keep Kamal happy
+  config.ssl_options = {
+    redirect: {
+      exclude: ->(request) { request.path == "/up" }
+    }
   }
-}
-
 
   # Skip http-to-https redirect for the default health check endpoint.
   # config.ssl_options = { redirect: { exclude: ->(request) { request.path == "/up" } } }
@@ -87,7 +86,7 @@ config.ssl_options = {
   config.active_record.dump_schema_after_migration = false
 
   # Only use :id for inspections in production.
-  config.active_record.attributes_for_inspect = [ :id ]
+  config.active_record.attributes_for_inspect = [:id]
 
   # Enable DNS rebinding protection and other `Host` header attacks.
   # config.hosts = [

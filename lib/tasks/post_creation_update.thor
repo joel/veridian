@@ -52,7 +52,7 @@ module PostCreation
         RUBY
         commit message: "Seed content"
 
-        [ "development", "production" ].each do |env|
+        %w[development production].each do |env|
           run("RAILS_ENV=#{env} bin/rails db:create")
           run("RAILS_ENV=#{env} bin/rails db:migrate")
           run("RAILS_ENV=#{env} bin/rails db:seed")
@@ -98,7 +98,7 @@ module PostCreation
         # say("Seed the database with initial data.")
         # run("bin/rails db:seed")
 
-        if adapter_name =~ /PostgreSQL/
+        if adapter_name.include?("PostgreSQL")
           say("DB_PORT=5433 bin/dev")
         else
           say("bin/dev")
@@ -107,13 +107,13 @@ module PostCreation
 
       private
 
-      def commit(message:, skips: [ "RailsSchemaUpToDate" ])
+      def commit(message:, skips: ["RailsSchemaUpToDate"])
         skip_command = ""
         skip_command = "SKIP=#{skips.join(",")}" unless skips.empty?
 
-        puts "| #{'-'*15}#{'-'*message.length}#{'-'*skip_command.length} |"
+        puts "| #{"-" * 15}#{"-" * message.length}#{"-" * skip_command.length} |"
         puts "| Committing: #{skip_command} [#{message}] |"
-        puts "| #{'-'*15}#{'-'*message.length}#{'-'*skip_command.length} |"
+        puts "| #{"-" * 15}#{"-" * message.length}#{"-" * skip_command.length} |"
 
         run("rubocop -A", capture: true)
         run("rubocop --regenerate-todo", capture: true)
@@ -131,9 +131,9 @@ module PostCreation
       def run_with_clean_bundler_env(cmd)
         success = if defined?(Bundler)
                     Bundler.with_original_env { run(cmd) }
-        else
+                  else
                     run(cmd)
-        end
+                  end
 
         return true if success
 

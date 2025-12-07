@@ -88,8 +88,8 @@ module PostCreation
 
         # Sanitize the app name
         sanitized_name = current_app_name.downcase
-                                          .delete("_") # Remove underscores
-                                          .delete("-") # Remove dashes
+                                         .delete("_") # Remove underscores
+                                         .delete("-") # Remove dashes
 
         # Verify the sanitized name
         if sanitized_name.match?(/^[a-z][a-z0-9]*$/)
@@ -110,9 +110,9 @@ module PostCreation
                     else
                       Bundler.with_unbundled_env { run(cmd) }
                     end
-        else
+                  else
                     run(cmd)
-        end
+                  end
 
         return true if success
 
