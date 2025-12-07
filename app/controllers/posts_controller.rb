@@ -14,7 +14,7 @@ class PostsController < ApplicationController
 
   # GET /posts/new
   def new
-    @post = Post.new
+    @post = Post.new(title: "A Post", body: "...", user_id: User.first.id)
   end
 
   # GET /posts/1/edit
