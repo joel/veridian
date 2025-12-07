@@ -1,0 +1,12 @@
+diff --git a/app/views/posts/_form.html.erb b/app/views/posts/_form.html.erb
+--- a/app/views/posts/_form.html.erb
++++ b/app/views/posts/_form.html.erb
+@@ -24,7 +24,7 @@
+
+   <div class="my-5">
+     <%= form.label :user_id %>
+-    <%= form.text_field :user_id, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
++    <%= form.select :user_id, User.all.collect { |p| [p.name, p.id] }, { include_blank: false }, { class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" } %>
+   </div>
+
+   <div class="inline">

@@ -1,0 +1,12 @@
+diff --git a/app/views/posts/_post.html.erb b/app/views/posts/_post.html.erb
+--- a/app/views/posts/_post.html.erb
++++ b/app/views/posts/_post.html.erb
+@@ -12,7 +12,7 @@
+
+   <p class="my-5">
+     <strong class="block font-medium mb-1">User:</strong>
+-    <%= post.user_id %>
++    <%= post.user.name %>
+   </p>
+
+   <% if action_name != "show" %>
