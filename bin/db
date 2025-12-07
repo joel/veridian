@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+# run the ruby script with the same name as the bash script
+ruby bin/db.thor.mysql.rb "$@"
