@@ -1,24 +1,40 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+# Usage
 
-Things you may want to cover:
+```
+Ruby 3.4.7
+Rails 8.1.1
+```
 
-* Ruby version
+```shell
+rails _8.1.1_ new veridian \
+  --database=mysql \
+  --skip-test \
+  --skip-jbuilder \
+  --template https://raw.githubusercontent.com/workanywhere/core-templates/article-medium/template.rb
+```
 
-* System dependencies
+```
+cd veridian
+```
 
-* Configuration
+```
+bin/web start
+```
 
-* Database creation
+See https://github.com/wayofdev/docker-shared-services
 
-* Database initialization
+```
+open https://veridian.workanywhere.docker/posts
+```
 
-* How to run the test suite
+```
+kamal setup
+```
 
-* Services (job queues, cache servers, search engines, etc.)
+```
+open https://veridian.workanywhere.app/posts
+```
 
-* Deployment instructions
 
-* ...
