@@ -2,11 +2,9 @@ require "rails_helper"
 
 RSpec.describe "posts/show" do
   before do
-    assign(:post, Post.create!(
-                    title: "Title",
-                    body: "MyText",
-                    user: nil
-                  ))
+    assign(:post, create(:post,
+                         title: "Title",
+                         body: "MyText"))
   end
 
   it "renders attributes in <p>" do
