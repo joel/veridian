@@ -149,6 +149,8 @@ GEM
     ffi (1.17.2-x86_64-linux-gnu)
     ffi (1.17.2-x86_64-linux-musl)
     flamegraph (0.9.5)
+    foreman (0.90.0)
+      thor (~> 1.4)
     fugit (1.12.1)
       et-orbi (~> 1.4)
       raabro (~> 1.4)
@@ -461,6 +463,7 @@ DEPENDENCIES
   factory_bot_rails
   ffaker
   flamegraph
+  foreman (~> 0.90.0)
   image_processing (~> 1.2)
   importmap-rails
   kamal
