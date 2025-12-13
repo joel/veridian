@@ -1,13 +1,16 @@
 #!/usr/bin/env bash
 set -euo pipefail
+# Pre-build hook to generate self-signed CA + server certs for the MySQL container.
 
 HOST_UID="${HOST_UID:-}"
 HOST_GID="${HOST_GID:-}"
+# If the caller didn't pass host ownership, detect it so generated files are not root-owned.
 if [[ -z "$HOST_UID" || -z "$HOST_GID" ]]; then
   HOST_UID=$(stat -c '%u' . 2>/dev/null || echo "")
   HOST_GID=$(stat -c '%g' . 2>/dev/null || echo "")
 fi
 
+# Where the TLS materials will live and be mounted.
 CERT_DIR="certs/mysql"
 
 # Idempotency: if directory already exists, assume certs are in place and skip regeneration.
@@ -19,6 +22,7 @@ fi
 
 mkdir -p "$CERT_DIR"
 
+# File paths used throughout the openssl workflow.
 CA_KEY="$CERT_DIR/ca-key.pem"
 CA_CRT="$CERT_DIR/ca.pem"
 SERVER_KEY="$CERT_DIR/server-key.pem"
@@ -26,16 +30,19 @@ SERVER_CSR="$CERT_DIR/server.csr"
 SERVER_CRT="$CERT_DIR/server-cert.pem"
 OPENSSL_EXT="$CERT_DIR/server-ext.cnf"
 
+# Subject/SAN values baked into the cert; allow overrides for custom hostnames.
 DB_HOSTNAME="${DB_HOSTNAME:-veridian-db}"
 ALT_NAMES="${ALT_NAMES:-DNS:${DB_HOSTNAME},DNS:localhost,IP:127.0.0.1}"
 
+# Create a simple CA to sign the server certificate.
 openssl genrsa -out "$CA_KEY" 4096
 openssl req -x509 -new -nodes -key "$CA_KEY" -sha256 -days 3650 \
   -subj "/CN=Kamal MySQL CA" -out "$CA_CRT"
 
+# Generate the server key used by the DB container.
 openssl genrsa -out "$SERVER_KEY" 4096
 
-# SANs for server cert
+# SAN list for server cert; placed in a temp extfile for openssl -extfile.
 cat > "$OPENSSL_EXT" <<EOF
 authorityKeyIdentifier=keyid,issuer
 basicConstraints=CA:FALSE
@@ -44,7 +51,7 @@ extendedKeyUsage=serverAuth
 subjectAltName=${ALT_NAMES}
 EOF
 
-# CSR + sign
+# Build the CSR and sign it with the CA to produce the server cert.
 openssl req -new -key "$SERVER_KEY" -subj "/CN=${DB_HOSTNAME}" -out "$SERVER_CSR"
 openssl x509 -req -in "$SERVER_CSR" -CA "$CA_CRT" -CAkey "$CA_KEY" -CAcreateserial \
   -out "$SERVER_CRT" -days 825 -sha256 -extfile "$OPENSSL_EXT"
@@ -54,6 +61,7 @@ openssl x509 -req -in "$SERVER_CSR" -CA "$CA_CRT" -CAkey "$CA_KEY" -CAcreateseri
 chmod 604 "$SERVER_KEY"
 chmod 644 "$SERVER_CRT" "$CA_CRT"
 
+# When running as root in a container, restore ownership to the invoking host user.
 if [[ $(id -u) -eq 0 && -n "$HOST_UID" && -n "$HOST_GID" ]]; then
   chown -R "$HOST_UID:$HOST_GID" "$CERT_DIR"
 fi
